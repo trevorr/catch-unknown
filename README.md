@@ -1,5 +1,8 @@
 # catch-unknown: Utility functions for writing type-safe JavaScript catch blocks
 
+[![npm](https://img.shields.io/npm/v/catch-unknown)](https://www.npmjs.com/package/catch-unknown)
+[![CircleCI](https://img.shields.io/circleci/build/github/trevorr/catch-unknown)](https://circleci.com/gh/trevorr/catch-unknown)
+
 While exceptions thrown in JavaScript are usually objects of class `Error`, they can actually be values of any type.
 This is particularly relevant in TypeScript, which in version 4.4 starting [defaulting `catch` variables to `unknown`
 type](https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables) (instead of `any`).
