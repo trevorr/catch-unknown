@@ -66,72 +66,86 @@ test('isError(undefined)', () => {
 test('asError(new Error())', () => {
   const err = new Error();
   expect(asError(err)).toBe(err);
+  expect(err instanceof Error).toBe(true);
 });
 
 test('asError({ name: "foo", message: "bar" })', () => {
   const err = { name: 'foo', message: 'bar' };
   expect(asError(err)).toBe(err);
+  expect(err instanceof Error).toBe(false);
 });
 
 test('asError({ name: "foo", message: "bar", stack: "" })', () => {
   const err = { name: 'foo', message: 'bar', stack: '' };
   expect(asError(err)).toBe(err);
+  expect(err instanceof Error).toBe(false);
 });
 
 test('asError({ name: "foo" })', () => {
-  expect(asError({ name: 'foo' })).toEqual({
-    name: 'Object',
-    message: '{"name":"foo"}',
-  });
+  const err = asError({ name: 'foo' });
+  expect(err.name).toEqual('Object');
+  expect(err.message).toEqual('{"name":"foo"}');
+  expect(err.toString()).toEqual('Object: {"name":"foo"}');
+  expect(err instanceof Error).toBe(true);
 });
 
 test('asError({ message: "bar" })', () => {
-  expect(asError({ message: 'bar' })).toEqual({
-    name: 'Object',
-    message: 'bar',
-  });
+  const err = asError({ message: 'bar' });
+  expect(err.name).toEqual('Object');
+  expect(err.message).toEqual('bar');
+  expect(err.toString()).toEqual('Object: bar');
+  expect(err instanceof Error).toBe(true);
 });
 
 test('asError({ name: "foo", message: "bar", stack: true })', () => {
-  expect(asError({ name: 'foo', message: 'bar', stack: true })).toEqual({
-    name: 'Object',
-    message: 'bar',
-  });
+  const err = asError({ name: 'foo', message: 'bar', stack: true });
+  expect(err.name).toEqual('Object');
+  expect(err.message).toEqual('bar');
+  expect(err.toString()).toEqual('Object: bar');
+  expect(err instanceof Error).toBe(true);
 });
 
 test('asError({})', () => {
-  expect(asError({})).toEqual({ name: 'Object', message: '{}' });
+  const err = asError({});
+  expect(err.name).toEqual('Object');
+  expect(err.message).toEqual('{}');
+  expect(err.toString()).toEqual('Object: {}');
+  expect(err instanceof Error).toBe(true);
 });
 
 test('asError({ value: 42 })', () => {
-  expect(asError({ value: 42 })).toEqual({
-    name: 'Object',
-    message: '{"value":42}',
-  });
+  const err = asError({ value: 42 });
+  expect(err.name).toEqual('Object');
+  expect(err.message).toEqual('{"value":42}');
+  expect(err.toString()).toEqual('Object: {"value":42}');
+  expect(err instanceof Error).toBe(true);
 });
 
 test('asError(circular)', () => {
   const circular: Record<string, object | null> = { self: null };
   // causes JSON.stringify() to throw, falling back to String()
   circular.self = circular;
-  expect(asError(circular)).toEqual({
-    name: 'Object',
-    message: '[object Object]',
-  });
+  const err = asError(circular);
+  expect(err.name).toEqual('Object');
+  expect(err.message).toEqual('[object Object]');
+  expect(err.toString()).toEqual('Object: [object Object]');
+  expect(err instanceof Error).toBe(true);
 });
 
 test('asError(new MyClass())', () => {
-  expect(asError(new MyClass())).toEqual({
-    name: 'MyClass',
-    message: 'hello',
-  });
+  const err = asError(new MyClass());
+  expect(err.name).toEqual('MyClass');
+  expect(err.message).toEqual('hello');
+  expect(err.toString()).toEqual('MyClass: hello');
+  expect(err instanceof Error).toBe(true);
 });
 
 test('asError("some string")', () => {
-  expect(asError('some string')).toEqual({
-    name: 'string',
-    message: 'some string',
-  });
+  const err = asError('some string');
+  expect(err.name).toEqual('string');
+  expect(err.message).toEqual('some string');
+  expect(err.toString()).toEqual('string: some string');
+  expect(err instanceof Error).toBe(true);
 });
 
 test('asError(function f() {})', () => {
@@ -140,30 +154,46 @@ test('asError(function f() {})', () => {
   // exact representation is implementation-defined:
   // https://tc39.es/ecma262/multipage/fundamental-objects.html#sec-function.prototype.tostring
   expect(err.message).toMatch(/^function/);
+  expect(err.toString()).toMatch(/^function: function/);
+  expect(err instanceof Error).toBe(true);
 });
 
 test('asError(symbol)', () => {
-  expect(asError(symbol)).toEqual({
-    name: 'symbol',
-    message: 'Symbol(world)',
-  });
+  const err = asError(symbol);
+  expect(err.name).toEqual('symbol');
+  expect(err.message).toEqual('Symbol(world)');
+  expect(err.toString()).toEqual('symbol: Symbol(world)');
+  expect(err instanceof Error).toBe(true);
 });
 
 test('asError(42)', () => {
-  expect(asError(42)).toEqual({ name: 'number', message: '42' });
+  const err = asError(42);
+  expect(err.name).toEqual('number');
+  expect(err.message).toEqual('42');
+  expect(err.toString()).toEqual('number: 42');
+  expect(err instanceof Error).toBe(true);
 });
 
 test('asError(false)', () => {
-  expect(asError(false)).toEqual({ name: 'boolean', message: 'false' });
+  const err = asError(false);
+  expect(err.name).toEqual('boolean');
+  expect(err.message).toEqual('false');
+  expect(err.toString()).toEqual('boolean: false');
+  expect(err instanceof Error).toBe(true);
 });
 
 test('asError(null)', () => {
-  expect(asError(null)).toEqual({ name: 'object', message: 'null' });
+  const err = asError(null);
+  expect(err.name).toEqual('object');
+  expect(err.message).toEqual('null');
+  expect(err.toString()).toEqual('object: null');
+  expect(err instanceof Error).toBe(true);
 });
 
 test('asError(undefined)', () => {
-  expect(asError(undefined)).toEqual({
-    name: 'undefined',
-    message: 'undefined',
-  });
+  const err = asError(undefined);
+  expect(err.name).toEqual('undefined');
+  expect(err.message).toEqual('undefined');
+  expect(err.toString()).toEqual('undefined: undefined');
+  expect(err instanceof Error).toBe(true);
 });

@@ -55,35 +55,35 @@ try {
   throw new Error('Something is wrong');
 } catch (err) {
   console.log(isError(err)); // true
-  console.log(asError(err)); // "Error: Something is wrong at ..."
+  console.log(asError(err)); // Error: Something is wrong
 }
 
 try {
   throw { message: 'An odd thing to throw' };
 } catch (err) {
   console.log(isError(err)); // false
-  console.log(asError(err)); // { name: 'Object', message: 'An odd thing to throw' }
+  console.log(asError(err)); // Object: An odd thing to throw
 }
 
 try {
   throw { x: 12, y: 5 };
 } catch (err) {
   console.log(isError(err)); // false
-  console.log(asError(err)); // { name: 'Object', message: '{"x":12,"y":5}' }
+  console.log(asError(err)); // Object: {"x":12,"y":5}
 }
 
 try {
   throw new Date(0);
 } catch (err) {
   console.log(isError(err)); // false
-  console.log(asError(err)); // { name: 'Date', message: 'Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)' }
+  console.log(asError(err)); // Date: Thu Jan 01 1970 00:00:00 GMT+0000 (Coordinated Universal Time)
 }
 
 try {
   throw 42;
 } catch (err) {
   console.log(isError(err)); // false
-  console.log(asError(err)); // { name: 'number', message: '42' }
+  console.log(asError(err)); // number: 42
 }
 ```
 

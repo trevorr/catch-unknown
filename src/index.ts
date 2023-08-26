@@ -27,7 +27,7 @@ export function isError(err: unknown): err is Error {
 
 export function asError(err: unknown): Error {
   if (isError(err)) return err;
-  const name = (isObject(err) && err.constructor.name) || typeof err;
-  const message = isObject(err) ? getObjectMessage(err) : String(err);
-  return { name, message };
+  const error = new Error(isObject(err) ? getObjectMessage(err) : String(err));
+  error.name = (isObject(err) && err.constructor.name) || typeof err;
+  return error;
 }
